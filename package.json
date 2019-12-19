@@ -1,28 +1,40 @@
 {
-  "name": "cjdev-aws-cdk",
+  "name": "@jmwindsor/aws-cdk-cjdev",
   "version": "0.1.0",
+  "description": "A collection of opinionated aws constructs, which define our commonly used infrastructure patterns",
+  "keywords": ["aws","aws-cdk","cjdev"],
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://github.com/cjdev/aws-cdk-cjdev#readme",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/cjdev/aws-cdk-cjdev"
+  },
+  "author": "Jeff Windsor <jwindsor@cj.com> (http://jeffreywindsor.com/)",
+  "contributors": [],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "test": "jest"
+    "test": "jest",
+    "test-watch": "jest --watch",
+    "cdk": "cdk"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "^1.18.0",
-    "@types/jest": "^24.0.22",
-    "@types/node": "10.17.5",
+    "@aws-cdk/assert": "1.18.0",
+    "@types/jest": "^24.0.18",
+    "aws-cdk": "^1.18.0",
     "jest": "^24.9.0",
-    "ts-jest": "^24.1.0",
-    "typescript": "~3.7.2"
-  },
-  "peerDependencies": {
-    "@aws-cdk/core": "^1.18.0"
+    "jest-when": "^2.7.0",
+    "ts-jest": "^24.0.2",
+    "ts-node": "^8.1.0",
+    "typescript": "~3.6.2"
   },
   "dependencies": {
-    "@aws-cdk/aws-sns": "^1.18.0",
-    "@aws-cdk/aws-sns-subscriptions": "^1.18.0",
-    "@aws-cdk/aws-sqs": "^1.18.0",
-    "@aws-cdk/core": "^1.18.0"
+    "@aws-cdk/core": "1.18.0",
+    "@aws-cdk/aws-s3": "1.18.0",
+    "@aws-cdk/aws-apigateway": "1.18.0",
+    "@aws-cdk/aws-iam": "1.18.0",
+    "@aws-cdk/aws-lambda": "1.18.0"
   }
 }

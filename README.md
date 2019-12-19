@@ -1,12 +1,7 @@
-# Welcome to your CDK TypeScript Construct Library project!
+# CJ Engineering CDK Construct Library (TypeScript)
 
-You should explore the contents of this project. It demonstrates a CDK Construct Library that includes a construct (`CjdevAwsCdk`)
-which contains an Amazon SQS queue that is subscribed to an Amazon SNS topic.
+![npm (scoped)](https://img.shields.io/npm/v/@jmwindsor/aws-cdk-cjdev)
 
-The construct defines an interface (`CjdevAwsCdkProps`) to configure the visibility timeout of the queue.
+## Constructs
 
-## Useful commands
-
- * `npm run build`   compile typescript to js
- * `npm run watch`   watch for changes and compile
- * `npm run test`    perform the jest unit tests
+### ProxyApi
