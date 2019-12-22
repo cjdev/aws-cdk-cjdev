@@ -16,7 +16,7 @@ describe('ProxyApiWithCustomAuthorizer', () => {
         };
 
         // when
-        new ProxyApiWithCustomAuthorizer(stack, "TestProxyApi", functionProps, functionProps);
+        new ProxyApiWithCustomAuthorizer(stack, "TestProxyApi",functionProps,functionProps);
 
         // then
         expectStack(stack).to(haveResource("AWS::ApiGateway::RestApi"));
