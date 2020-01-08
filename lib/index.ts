@@ -1,7 +1,10 @@
-import {ProxyApiWithCustomAuthorizer} from './ProxyApiWithCustomAuthorizer'
-import {InvocableTask} from "./InvocableTask";
+import {RestApiWithCustomAuthorizer, RestApiProxyWithCustomAuthorizer} from './RestApi'
+import {ContainerTask} from "./ContainerTask";
+import {BucketWithOutputs} from "./BucketWithOutputs";
 
 export{
-    InvocableTask,
-    ProxyApiWithCustomAuthorizer
+    BucketWithOutputs,
+    ContainerTask,
+    RestApiWithCustomAuthorizer,
+    RestApiProxyWithCustomAuthorizer
 }

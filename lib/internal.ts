@@ -1,42 +1,31 @@
-import {CfnOutput, Construct} from "@aws-cdk/core";
-import {Effect, IManagedPolicy, ManagedPolicy, PolicyStatement, PrincipalBase, Role} from "@aws-cdk/aws-iam";
-import {Bucket} from "@aws-cdk/aws-s3";
+import {Construct} from "@aws-cdk/core";
+import {
+    ManagedPolicy,
+    PolicyStatement, PolicyStatementProps,
+    PrincipalBase,
+    ServicePrincipal
+} from "@aws-cdk/aws-iam";
+import {Secret as EcsSecret} from "@aws-cdk/aws-ecs/lib/container-definition";
+import {Secret as SmSecret} from "@aws-cdk/aws-secretsmanager/lib/secret";
 
-const createRole = (scope: Construct,
-                    name: string,
-                    principle: PrincipalBase,
-                    managedPolicies: IManagedPolicy[]) => {
-    const role = new Role(scope, name, {
-        managedPolicies: managedPolicies,
-        assumedBy: principle,
-    });
-    new CfnOutput(scope, `${role}Arn`, { value: role.roleArn });
-    return role;
-};
+const createLambdaPrinciple = () : PrincipalBase => new ServicePrincipal('lambda.amazonaws.com');
+const createApiGateWayPrinciple = () : PrincipalBase => new ServicePrincipal('apigateway.amazonaws.com');
 
+const createManagedPolicy = (scope: Construct, name: string, policyStatements: PolicyStatementProps[]) =>
+    new ManagedPolicy(scope,name, { statements: createAllowPolicyStatements(policyStatements) });
 
-const createAllowPolicy = (scope: Construct, name: string, actions: string[], resources: string[]) =>
-    new ManagedPolicy(
-        scope,
-        name, {
-            statements: [
-                new PolicyStatement({
-                    effect: Effect.ALLOW,
-                    actions: actions,
-                    resources: resources
-                })
-            ]
-        });
+const createAllowPolicyStatements = (policyStatements: PolicyStatementProps[]) =>
+           policyStatements.map(ps => new PolicyStatement(ps));
 
-const createBucket = (scope: Construct, name: string) => {
-    const bucket = new Bucket(scope, `${name}`);
-    new CfnOutput(scope, `${name}Arn`, { value: bucket.bucketArn });
-    new CfnOutput(scope, `${name}Name`, { value: bucket.bucketName });
-    return bucket;
+const createNamespacedEcsSecrets = (scope: Construct, namespace: string, names: string[]): { [key:string]: EcsSecret } => {
+    const smSec = (name: string) => new SmSecret(scope, name, { "secretName": namespace + name });
+    const ecsSec = (name: string) => EcsSecret.fromSecretsManager(smSec(name));
+    return names.reduce((acc, name) => Object.assign(acc, { [name]: ecsSec(name) }), {});
 };
 
 export {
-    createAllowPolicy,
-    createBucket,
-    createRole
+    createApiGateWayPrinciple,
+    createManagedPolicy,
+    createNamespacedEcsSecrets,
+    createLambdaPrinciple
 }
