@@ -1,68 +1,37 @@
 import {CfnOutput, Construct} from "@aws-cdk/core";
-import {ContainerImage, FargateTaskDefinition, FargateTaskDefinitionProps, LogDriver} from "@aws-cdk/aws-ecs";
-import {createManagedPolicy, createNamespacedEcsSecrets, createLambdaPrinciple} from "./internal";
-import {Effect, ManagedPolicy} from "@aws-cdk/aws-iam";
+import {ContainerImage, FargateTaskDefinitionProps} from "@aws-cdk/aws-ecs";
+import {Repository} from '@aws-cdk/aws-ecr';
+import {IPrincipal} from "@aws-cdk/aws-iam";
 import {Function, FunctionProps, IFunction} from '@aws-cdk/aws-lambda';
-import {RoleWithOutputs} from './RoleWithOutputs'
+import {FargateContainerTaskDefinition} from "./ecs/FargateContainerTaskDefinition";
+import {FargateTaskDefinitionRunTaskRole} from "./ecs/FargateTaskDefinitionRunTaskRole";
+import {RepoUploaderRole} from "./ecr/RepoUploaderRole";
 
-class FargateContainerTaskDefinition extends FargateTaskDefinition {
-     constructor(scope: Construct,
-                id: string,
-                taskEnvironment: [string],
-                image: ContainerImage,
-                taskProps?: FargateTaskDefinitionProps) {
-        super(scope, id, taskProps);
-
-        this.addContainer(`${id}Container`, {
-            image,
-            secrets: createNamespacedEcsSecrets(scope, id, taskEnvironment),
-            logging: LogDriver.awsLogs({
-                streamPrefix: `${id}ContainerLog`
-            })
-        });
-        new CfnOutput(this, 'TaskDefinitionArn', { value: this.taskDefinitionArn });
-    }
-}
-
-class RunTaskRole extends RoleWithOutputs {
-    constructor(scope: FargateContainerTaskDefinition) {
-        super(scope, 'RunTaskRole', {
-                assumedBy: createLambdaPrinciple(),
-                managedPolicies: [
-                    createManagedPolicy(scope, 'RunTaskPolicy',
-                        [{
-                            actions: ['ecs:RunTask'],
-                            resources: [scope.taskDefinitionArn],
-                            effect: Effect.ALLOW
-                        }]),
-                    createManagedPolicy(scope, 'PassRolePolicy',
-                        [{
-                            effect: Effect.ALLOW,
-                            actions: ['iam:PassRole'],
-                            resources: [scope.taskRole.roleArn, scope.executionRole!.roleArn]
-                        }]),
-                    ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')
-                ]
-            }
-        );
-    }
+interface ContainerTaskProps {
+    taskEnvironment: [string],
+    repoUploaderPrincipal: IPrincipal,
+    invokerFunctionProps: FunctionProps,
+    taskProps?: FargateTaskDefinitionProps,
+    repo?: Repository
 }
 
 export class ContainerTask extends Construct {
     public readonly TaskRunner: IFunction;
     constructor(scope: Construct,
                 id: string,
-                taskEnvironment: [string],
-                image: ContainerImage,
-                invokerFunctionProps: FunctionProps,
-                taskProps?: FargateTaskDefinitionProps) {
+                props: ContainerTaskProps) {
         super(scope, id);
 
-        const task = new FargateContainerTaskDefinition(this, 'ContainerTask', taskEnvironment, image, taskProps);
-        const runTaskRole = new RunTaskRole(task);
-        const runner = new Function(this, 'RunTaskLambda', {role: runTaskRole, ...invokerFunctionProps });
+        const repo = props.repo || new Repository(this, 'Repo');
+        const imageUploaderRole = new RepoUploaderRole(this, props.repoUploaderPrincipal, repo);
+        const containerImage = ContainerImage.fromEcrRepository(repo);
+        const task = new FargateContainerTaskDefinition(this, 'ContainerTask', props.taskEnvironment, containerImage, props.taskProps);
+        const runTaskRole = new FargateTaskDefinitionRunTaskRole(task);
+        const runner = new Function(this, 'RunTaskLambda', {role: runTaskRole, ...props.invokerFunctionProps });
 
         new CfnOutput(this, 'RunTaskLambdaArn', { value: runner.functionArn });
+        new CfnOutput(this, 'ContainerRepoURI', { value: repo.repositoryUri });
+        new CfnOutput(this, 'ContainerRepoUploaderRoleArn', {  value: imageUploaderRole.roleArn });
         this.TaskRunner = runner;
     }
 }
