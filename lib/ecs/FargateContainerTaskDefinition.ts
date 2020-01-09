@@ -1,5 +1,5 @@
 import {ContainerImage, FargateTaskDefinition, FargateTaskDefinitionProps, LogDriver} from "@aws-cdk/aws-ecs";
-import {CfnOutput, Construct} from "@aws-cdk/core";
+import {Construct} from "@aws-cdk/core";
 import {Secret as EcsSecret} from "@aws-cdk/aws-ecs/lib/container-definition";
 import {Secret as SmSecret} from "@aws-cdk/aws-secretsmanager/lib/secret";
 
@@ -24,6 +24,5 @@ export class FargateContainerTaskDefinition extends FargateTaskDefinition {
                 streamPrefix: `${id}ContainerLog`
             })
         });
-        new CfnOutput(this, 'TaskDefinitionArn', {value: this.taskDefinitionArn});
     }
 }

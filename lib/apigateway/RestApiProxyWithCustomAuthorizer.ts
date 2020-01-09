@@ -1,16 +1,16 @@
 import {Construct} from "@aws-cdk/core";
-import {Function, FunctionProps} from "@aws-cdk/aws-lambda";
+import {FunctionProps, IFunction} from "@aws-cdk/aws-lambda";
 import {AuthorizationType, LambdaIntegration} from "@aws-cdk/aws-apigateway";
 import {RestApiWithCustomAuthorizer} from "./RestApiWithCustomAuthorizer";
 
 class RestApiProxyWithCustomAuthorizer extends RestApiWithCustomAuthorizer {
+    public readonly ProxyFunction: IFunction;
+
     constructor(parent: Construct,
                 id: string,
-                proxyFunctionProps: FunctionProps,
+                proxyFunction: IFunction,
                 authorizerFunctionProps: FunctionProps) {
         super(parent, id, authorizerFunctionProps);
-
-        const proxyFunction = new Function(this, 'ProxyFunction', proxyFunctionProps);
 
         this.root.addMethod('ANY');
         this.root
@@ -21,6 +21,8 @@ class RestApiProxyWithCustomAuthorizer extends RestApiWithCustomAuthorizer {
                     authorizer: {authorizerId: this.Authorizer.ref}
                 }
             );
+
+        this.ProxyFunction = proxyFunction;
     }
 }
 

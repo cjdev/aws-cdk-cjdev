@@ -1,5 +1,5 @@
-import {ContainerTask} from "./ContainerTask";
+import {SingleContainerApiStack} from "./SingleContainerApiStack";
 
 export{
-    ContainerTask
+    SingleContainerApiStack
 }

@@ -3,8 +3,8 @@ import {FargateTaskDefinition} from "@aws-cdk/aws-ecs";
 import {ManagedPolicyOverPolicyStatements} from "../iam/ManagedPolicyOverPolicyStatements";
 
 export class FargateTaskDefinitionRunTaskRole extends Role {
-    constructor(scope: FargateTaskDefinition) {
-        super(scope, 'RunTaskRole', {
+    constructor(scope: FargateTaskDefinition, id: string) {
+        super(scope, id, {
                 assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
                 managedPolicies: [
                     new ManagedPolicyOverPolicyStatements(scope, 'RunTaskPolicy',
