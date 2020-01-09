@@ -12,7 +12,7 @@ interface SingleContainerApiStackProps {
     repoUploadImageRoleAssumedByPrincipal: IPrincipal,
     apiAuthorizerFunctionProps: FunctionProps,
     taskRunnerFunctionProps: FunctionProps,
-    containerEnvArgs: [string],
+    containerEnvVars?: [string],
     taskProps?: FargateTaskDefinitionProps
 }
 
@@ -26,7 +26,7 @@ class SingleContainerApiStack extends Stack {
         const repoUploadImageRole = new RepoUploaderRole(this, 'RepoUploaderRole', repo, props.repoUploadImageRoleAssumedByPrincipal);
 
         const cluster = new Cluster(this, 'Cluster');
-        const task = new FargateContainerTaskDefinition(this, 'ContainerTask', props.containerEnvArgs, repo.Image, props.taskProps);
+        const task = new FargateContainerTaskDefinition(this, 'ContainerTask', repo.Image, props.containerEnvVars, props.taskProps);
         const taskRunRole = new FargateTaskDefinitionRunTaskRole(this, 'RunTaskRole', task);
         const taskRunner = new Function(this, 'RunTaskLambda', {
             role: taskRunRole,
