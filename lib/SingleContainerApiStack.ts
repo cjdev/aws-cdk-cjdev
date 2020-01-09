@@ -12,7 +12,7 @@ interface SingleContainerApiStackProps {
     repoUploadImageRoleAssumedByPrincipal: IPrincipal,
     apiAuthorizerFunctionProps: FunctionProps,
     taskRunnerFunctionProps: FunctionProps,
-    containerEnvVars?: [string],
+    containerEnvVars?: Array<string>,
     taskProps?: FargateTaskDefinitionProps
 }
 
