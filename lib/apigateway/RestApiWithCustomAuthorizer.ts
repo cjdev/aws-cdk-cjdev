@@ -6,15 +6,15 @@ import {RestApiCustomAuthorizer} from "./RestApiCustomAuthorizer";
 class RestApiWithCustomAuthorizer extends RestApi {
     public readonly Authorizer: CfnAuthorizer;
 
-    constructor(parent: Construct,
+    constructor(scope: Construct,
                 id: string,
                 authorizerFunctionProps: FunctionProps) {
-        super(parent, id, {
+        super(scope, id, {
             deploy: true,
             deployOptions: {stageName: "v1"}
         });
 
-        this.Authorizer = new RestApiCustomAuthorizer(this, 'Custom', authorizerFunctionProps);
+        this.Authorizer = new RestApiCustomAuthorizer(scope, 'Custom', this, authorizerFunctionProps);
     }
 }
 

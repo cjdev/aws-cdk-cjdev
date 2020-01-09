@@ -23,11 +23,11 @@ class SingleContainerApiStack extends Stack {
         super(scope, id);
 
         const repo = new SingleImageRepository(this,'SingleImageRepository');
-        const repoUploadImageRole = new RepoUploaderRole(repo, 'RepoUploaderRole', props.repoUploadImageRoleAssumedByPrincipal);
+        const repoUploadImageRole = new RepoUploaderRole(scope, 'RepoUploaderRole', repo, props.repoUploadImageRoleAssumedByPrincipal);
 
         const cluster = new Cluster(this, 'Cluster');
         const task = new FargateContainerTaskDefinition(this, 'ContainerTask', props.containerEnvArgs, repo.Image, props.taskProps);
-        const taskRunRole = new FargateTaskDefinitionRunTaskRole(task, 'RunTaskRole');
+        const taskRunRole = new FargateTaskDefinitionRunTaskRole(scope, 'RunTaskRole', task);
         const taskRunner = new Function(this, 'RunTaskLambda', {
             role: taskRunRole,
             environment: {

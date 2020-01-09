@@ -1,10 +1,12 @@
+import {Construct} from "@aws-cdk/core";
 import {CfnAuthorizer, RestApi} from "@aws-cdk/aws-apigateway";
 import {Function, FunctionProps} from "@aws-cdk/aws-lambda";
 import {InvokeFunctionRole} from "./InvokeFunctionRole";
 
 export class RestApiCustomAuthorizer extends CfnAuthorizer {
-    constructor(api: RestApi,
+    constructor(scope: Construct,
                 id: string,
+                api: RestApi,
                 functionProps: FunctionProps) {
         super(api, 'AuthorizerCnf', {
             restApiId: api.restApiId,
@@ -12,7 +14,7 @@ export class RestApiCustomAuthorizer extends CfnAuthorizer {
         });
 
         const authorizerFunction = new Function(this, 'AuthorizerFunction', functionProps);
-        const invokeRole = new InvokeFunctionRole(authorizerFunction);
+        const invokeRole = new InvokeFunctionRole(scope, authorizerFunction);
 
         this.authorizerCredentials = invokeRole.roleArn;
         this.authorizerResultTtlInSeconds = 0; // this is required to avoid random authorization denials

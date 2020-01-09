@@ -1,11 +1,12 @@
 import {Effect, IPrincipal, Role} from "@aws-cdk/aws-iam";
 import {Repository} from "@aws-cdk/aws-ecr";
 import {ManagedPolicyOverPolicyStatements} from "../iam/ManagedPolicyOverPolicyStatements";
-import {CfnOutput} from "@aws-cdk/core";
+import {Construct} from "@aws-cdk/core";
 
 export class RepoUploaderRole extends Role {
-    constructor(scope: Repository,
+    constructor(scope: Construct,
                 id: string,
+                repo: Repository,
                 principal: IPrincipal) {
         super(scope, id, {
             assumedBy: principal,
@@ -13,7 +14,7 @@ export class RepoUploaderRole extends Role {
                 new ManagedPolicyOverPolicyStatements(scope, 'ContainerRepoUploaderPolicy', [
                     {
                         effect: Effect.ALLOW,
-                        resources: [scope.repositoryArn],
+                        resources: [repo.repositoryArn],
                         actions: ['ecr:PutImage', 'ecr:BatchCheckLayerAvailability', 'ecr:UploadLayerPart', 'ecr:InitiateLayerUpload', 'ecr:CompleteLayerUpload']
                     },
                     {

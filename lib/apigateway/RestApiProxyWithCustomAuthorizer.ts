@@ -6,11 +6,11 @@ import {RestApiWithCustomAuthorizer} from "./RestApiWithCustomAuthorizer";
 class RestApiProxyWithCustomAuthorizer extends RestApiWithCustomAuthorizer {
     public readonly ProxyFunction: IFunction;
 
-    constructor(parent: Construct,
+    constructor(scope: Construct,
                 id: string,
                 proxyFunction: IFunction,
                 authorizerFunctionProps: FunctionProps) {
-        super(parent, id, authorizerFunctionProps);
+        super(scope, id, authorizerFunctionProps);
 
         this.root.addMethod('ANY');
         this.root
