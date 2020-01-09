@@ -7,7 +7,7 @@ export class InvokeFunctionRole extends Role {
         super(scope, 'InvokeFunctionPolicy', {
                 assumedBy: new ServicePrincipal('apigateway.amazonaws.com'),
                 managedPolicies: [
-                    new ManagedPolicyOverPolicyStatements(scope, 'InvokeFunctionPolicy', [{
+                    new ManagedPolicyOverPolicyStatements(scope, 'InvokeFunctionStatement', [{
                         actions: ['lambda:invokeFunction'],
                         resources: [scope.functionArn],
                         effect: Effect.ALLOW
