@@ -1,4 +1,4 @@
-import {Construct} from "@aws-cdk/core";
+import {Stack} from "@aws-cdk/core";
 import {FunctionProps, IFunction} from "@aws-cdk/aws-lambda";
 import {AuthorizationType, LambdaIntegration} from "@aws-cdk/aws-apigateway";
 import {RestApiWithCustomAuthorizer} from "./RestApiWithCustomAuthorizer";
@@ -6,7 +6,7 @@ import {RestApiWithCustomAuthorizer} from "./RestApiWithCustomAuthorizer";
 class RestApiProxyWithCustomAuthorizer extends RestApiWithCustomAuthorizer {
     public readonly ProxyFunction: IFunction;
 
-    constructor(scope: Construct,
+    constructor(scope: Stack,
                 id: string,
                 proxyFunction: IFunction,
                 authorizerFunctionProps: FunctionProps) {
