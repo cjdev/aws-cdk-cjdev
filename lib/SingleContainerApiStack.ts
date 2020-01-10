@@ -16,6 +16,8 @@ interface SingleContainerApiStackProps {
     taskProps?: FargateTaskDefinitionProps
 }
 
+//TODO: look into helping the wiring of the task executrion and task role, currently passed in with the taskProps
+
 class SingleContainerApiStack extends Stack {
     constructor(scope: Construct,
                 id: string,
@@ -38,7 +40,6 @@ class SingleContainerApiStack extends Stack {
             },
             ...props.taskRunnerFunctionProps
         });
-
 
         const api = new RestApiProxyWithCustomAuthorizer(this,'RestApi',taskRunner, props.apiAuthorizerFunctionProps);
 
