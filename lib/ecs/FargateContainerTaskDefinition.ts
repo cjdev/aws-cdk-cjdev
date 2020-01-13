@@ -30,8 +30,10 @@ export class FargateContainerTaskDefinition extends FargateTaskDefinition {
             })
         };
 
-        if(taskEnvVars){
-            cdProps = {secrets: createNamespacedEcsSecrets(scope, id, taskEnvVars), ...cdProps}
+        if(taskEnvVars && taskEnvVars.length > 0){
+            cdProps = {
+                ...cdProps,
+                secrets: createNamespacedEcsSecrets(scope, id, taskEnvVars)}
         }
 
         this.addContainer(`${id}Container`, cdProps);

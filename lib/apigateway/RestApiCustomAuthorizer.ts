@@ -1,7 +1,7 @@
 import {Stack} from "@aws-cdk/core";
 import {CfnAuthorizer, RestApi} from "@aws-cdk/aws-apigateway";
 import {Function, FunctionProps} from "@aws-cdk/aws-lambda";
-import {InvokeFunctionRole} from "./InvokeFunctionRole";
+import {InvokeFunctionRole} from "../iam";
 
 export class RestApiCustomAuthorizer extends CfnAuthorizer {
     constructor(scope: Stack,

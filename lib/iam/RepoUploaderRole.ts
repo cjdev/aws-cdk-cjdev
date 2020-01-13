@@ -1,6 +1,6 @@
 import {Effect, IPrincipal, Role} from "@aws-cdk/aws-iam";
 import {Repository} from "@aws-cdk/aws-ecr";
-import {PolicyDocumentOverPolicyStatements} from "../iam/PolicyDocumentOverPolicyStatements";
+import {PolicyDocumentOverPolicyStatements} from "./index";
 import {Construct} from "@aws-cdk/core";
 
 export class RepoUploaderRole extends Role {
