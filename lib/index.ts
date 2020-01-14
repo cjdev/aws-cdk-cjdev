@@ -1,5 +1,5 @@
-import {SingleContainerApiStack} from "./SingleContainerApiStack";
+import {SingleContainerApi} from "./SingleContainerApi";
 
 export{
-    SingleContainerApiStack
+    SingleContainerApi
 }

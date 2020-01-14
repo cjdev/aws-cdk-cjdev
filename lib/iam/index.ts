@@ -3,11 +3,13 @@ import {PolicyDocumentOverPolicyStatements} from "./PolicyDocumentOverPolicyStat
 import {InvokeFunctionRole} from "./InvokeFunctionRole";
 import {RepoUploaderRole} from "./RepoUploaderRole";
 import {RunFargateTaskRole} from "./RunFargateTaskRole";
+import {ContainerTaskExecutionRole} from './ContainerTaskExecutionRole'
 
 export{
-    PolicyDocumentOverPolicyStatements,
-    ManagedPolicyOverPolicyStatements,
-    RepoUploaderRole,
+    ContainerTaskExecutionRole,
     InvokeFunctionRole,
+    ManagedPolicyOverPolicyStatements,
+    PolicyDocumentOverPolicyStatements,
+    RepoUploaderRole,
     RunFargateTaskRole
 }

@@ -1,11 +1,11 @@
 import {PolicyDocument, PolicyStatement, PolicyStatementProps} from "@aws-cdk/aws-iam";
 
 export class PolicyDocumentOverPolicyStatements extends PolicyDocument{
-    public static asRoleInlinePolicies(policyStatements: Array<PolicyStatementProps>): { [name: string]: PolicyDocument; }{
-        return { "policy": new PolicyDocumentOverPolicyStatements(policyStatements) }
+    public static asRoleInlinePolicies(policyStatementProps: PolicyStatementProps[]): { [name: string]: PolicyDocument; }{
+        return { "policy": new PolicyDocumentOverPolicyStatements(policyStatementProps) }
     };
 
-    constructor(policyStatements: Array<PolicyStatementProps>) {
-        super({ statements: policyStatements.map(ps => new PolicyStatement(ps)) });
+    constructor(policyStatementProps: PolicyStatementProps[]) {
+        super({ statements: policyStatementProps.map(ps => new PolicyStatement(ps)) });
     }
 }

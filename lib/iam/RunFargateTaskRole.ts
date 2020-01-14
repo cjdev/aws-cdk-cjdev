@@ -1,7 +1,7 @@
 import {Effect, ManagedPolicy, Role, ServicePrincipal} from "@aws-cdk/aws-iam";
 import {FargateTaskDefinition} from "@aws-cdk/aws-ecs";
 import {Construct} from "@aws-cdk/core";
-import {PolicyDocumentOverPolicyStatements} from "./index";
+import {PolicyDocumentOverPolicyStatements} from "./PolicyDocumentOverPolicyStatements";
 
 export class RunFargateTaskRole extends Role {
     constructor(scope: Construct, id: string, task: FargateTaskDefinition) {
@@ -14,9 +14,9 @@ export class RunFargateTaskRole extends Role {
                             effect: Effect.ALLOW
                         },
                         {
-                                effect: Effect.ALLOW,
-                                actions: ['iam:PassRole'],
-                                resources: [task.taskRole.roleArn, task.executionRole!.roleArn]
+                            effect: Effect.ALLOW,
+                            actions: ['iam:PassRole'],
+                            resources: [task.taskRole.roleArn, task.executionRole!.roleArn]
                         }
                         ]),
                 managedPolicies: [

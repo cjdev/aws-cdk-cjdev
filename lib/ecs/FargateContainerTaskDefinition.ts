@@ -9,18 +9,12 @@ import {Construct} from "@aws-cdk/core";
 import {Secret as EcsSecret} from "@aws-cdk/aws-ecs/lib/container-definition";
 import {Secret as SmSecret} from "@aws-cdk/aws-secretsmanager/lib/secret";
 
-const createNamespacedEcsSecrets = (scope: Construct, namespace: string, names: Array<string>): { [key:string]: EcsSecret } => {
-    const smSec = (name: string) => new SmSecret(scope, name, { "secretName": namespace + name });
-    const ecsSec = (name: string) => EcsSecret.fromSecretsManager(smSec(name));
-    return names.reduce((acc, name) => Object.assign(acc, { [name]: ecsSec(name) }), {});
-};
-
 export class FargateContainerTaskDefinition extends FargateTaskDefinition {
     constructor(scope: Construct,
                 id: string,
                 image: ContainerImage,
-                taskEnvVars?: Array<string>,
-                taskProps?: FargateTaskDefinitionProps) {
+                taskProps: FargateTaskDefinitionProps,
+                secrets?: { [key:string]: SmSecret }) {
         super(scope, id, taskProps);
 
         let cdProps: ContainerDefinitionOptions = {
@@ -30,12 +24,17 @@ export class FargateContainerTaskDefinition extends FargateTaskDefinition {
             })
         };
 
-        if(taskEnvVars && taskEnvVars.length > 0){
+        if(secrets){
             cdProps = {
                 ...cdProps,
-                secrets: createNamespacedEcsSecrets(scope, id, taskEnvVars)}
+                secrets: FargateContainerTaskDefinition.createEcsSecrets(secrets)}
         }
 
         this.addContainer(`${id}Container`, cdProps);
     }
+    private static createEcsSecrets(secrets: { [key:string]: SmSecret }): { [key:string]: EcsSecret }{
+        let result : { [key:string]: EcsSecret } = {};
+        Object.entries(secrets).map(([key, value]) => result[key] = EcsSecret.fromSecretsManager(value));
+        return result;
+    };
 }
