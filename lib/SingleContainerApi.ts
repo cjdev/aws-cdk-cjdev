@@ -24,6 +24,7 @@ interface SingleContainerApiStackProps {
  */
 class SingleContainerApi extends Construct {
     public readonly Repository: SingleImageRepository;
+    public readonly RepositoryUploadRole: RepoUploaderRole;
     public readonly Task: FargateContainerTaskDefinition;
     public readonly TaskRunnerLambda: Function;
     public readonly Api: RestApiProxyWithCustomAuthorizer;
@@ -58,11 +59,17 @@ class SingleContainerApi extends Construct {
             }
         });
 
-        new RestApiProxyWithCustomAuthorizer(this,'RestApi',taskRunner, props.apiAuthorizerFunctionProps);
+        const api = new RestApiProxyWithCustomAuthorizer(this,'RestApi',taskRunner, props.apiAuthorizerFunctionProps);
 
         new CfnOutput(this, 'ImageRepositoryUri', {value: imageRepository.repositoryUri});
         new CfnOutput(this, 'ImageRepositoryUploadRoleArn', {value: imageRepositoryUploadRole.roleArn});
         new CfnOutput(this, 'ContainerTaskDefinitionArn', {value: task.taskDefinitionArn});
+
+        this.Repository = imageRepository;
+        this.Task = task;
+        this.TaskRunnerLambda = taskRunner;
+        this.Api = api;
+        this.RepositoryUploadRole = imageRepositoryUploadRole;
     }
 }
 
