@@ -1,21 +1,19 @@
 import * as ec2 from "@aws-cdk/aws-ec2";
 import * as rds from "@aws-cdk/aws-rds";
 import * as cdk from "@aws-cdk/core";
-import * as sm from '@aws-cdk/aws-secretsmanager';
-
 
 export interface AuroraServerlessDatabaseClusterProps {
     vpc: ec2.IVpc;
     subnets: ec2.ISubnet[];
     databaseName: string;
+    databaseMasterPasswordSecretArn: string;
     masterUsername: string;
     charset: string;
 }
 
+
 export class AuroraServerlessDatabaseCluster extends rds.CfnDBCluster{
     public readonly securityGroup: ec2.SecurityGroup;
-    public readonly masterPassword: sm.Secret;
-    public readonly masterUserName: string;
 
     constructor(scope: cdk.Construct, id: string, props: AuroraServerlessDatabaseClusterProps) {
         super(scope, id,{
@@ -31,9 +29,6 @@ export class AuroraServerlessDatabaseCluster extends rds.CfnDBCluster{
                 minCapacity: 1,
                 secondsUntilAutoPause: 30 * 60
             }
-        });
-        const masterPasswordSecret = new sm.Secret(this, 'MasterPassword', {
-            generateSecretString: { excludePunctuation: true }
         });
         const parameterGroup = new rds.ClusterParameterGroup(this, 'cluster-param-group', {
             family: 'aurora5.6',
@@ -63,15 +58,11 @@ export class AuroraServerlessDatabaseCluster extends rds.CfnDBCluster{
             })
         );
 
-
         this.dbClusterParameterGroupName = parameterGroup.parameterGroupName;
         this.dbSubnetGroupName = subnetGroup.ref;
         this.vpcSecurityGroupIds = [dataAccessEc2SecurityGroup.securityGroupId];
-        this.masterUserPassword = cdk.Fn.join('', ['{{resolve:secretsmanager:', masterPasswordSecret.secretArn, '}}']);
+        this.masterUserPassword = cdk.Fn.join('', ['{{resolve:secretsmanager:', props.databaseMasterPasswordSecretArn, '}}']);
 
         this.securityGroup = dataAccessEc2SecurityGroup;
-        this.masterPassword = masterPasswordSecret;
-        this.masterUserName = props.masterUsername;
-
     }
 }
