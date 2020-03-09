@@ -1,6 +1,6 @@
 {
   "name": "@jmwindsor/aws-cdk-cjdev",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "A collection of opinionated aws constructs, which define our commonly used infrastructure patterns",
   "keywords": [
     "aws",
@@ -13,7 +13,6 @@
     "type": "git",
     "url": "https://github.com/cjdev/aws-cdk-cjdev"
   },
-  "author": "Jeff Windsor <jwindsor@cj.com> (http://jeffreywindsor.com/)",
   "contributors": [],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -25,28 +24,31 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "^1.22.0",
-    "@types/jest": "^24.0.22",
+    "@aws-cdk/assert": "^1.27.0",
+    "@types/jest": "^24.9.1",
     "@types/node": "10.17.5",
     "jest": "^24.9.0",
-    "ts-jest": "^24.1.0",
-    "typescript": "~3.7.2"
+    "ts-jest": "^24.3.0",
+    "typescript": "^3.7.5"
   },
   "peerDependencies": {
     "@aws-cdk/core": "^1.22.0"
   },
   "dependencies": {
-    "@aws-cdk/aws-apigateway": "^1.22.0",
-    "@aws-cdk/aws-ecs": "^1.22.0",
-    "@aws-cdk/aws-iam": "^1.22.0",
-    "@aws-cdk/aws-lambda": "^1.22.0",
-    "@aws-cdk/aws-s3": "^1.22.0",
-    "@aws-cdk/aws-rds": "^1.22.0",
-    "@aws-cdk/aws-cloudwatch": "^1.22.0",
-    "@aws-cdk/aws-ec2": "^1.22.0",
-    "@aws-cdk/aws-events": "^1.22.0",
-    "@aws-cdk/aws-kms": "^1.22.0",
-    "@aws-cdk/aws-logs": "^1.22.0",
-    "@aws-cdk/aws-secretsmanager": "^1.22.0"
+    "@aws-cdk/aws-apigateway": "^1.27.0",
+    "@aws-cdk/aws-cloudwatch": "^1.27.0",
+    "@aws-cdk/aws-ec2": "^1.27.0",
+    "@aws-cdk/aws-ecs": "^1.27.0",
+    "@aws-cdk/aws-events": "^1.27.0",
+    "@aws-cdk/aws-iam": "^1.27.0",
+    "@aws-cdk/aws-kinesis": "^1.27.0",
+    "@aws-cdk/aws-kinesisfirehose": "^1.27.0",
+    "@aws-cdk/aws-kms": "^1.27.0",
+    "@aws-cdk/aws-lambda": "^1.27.0",
+    "@aws-cdk/aws-logs": "^1.27.0",
+    "@aws-cdk/aws-logs-destinations": "^1.27.0",
+    "@aws-cdk/aws-rds": "^1.27.0",
+    "@aws-cdk/aws-s3": "^1.27.0",
+    "@aws-cdk/aws-secretsmanager": "^1.27.0"
   }
 }
