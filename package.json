@@ -1,6 +1,6 @@
 {
-  "name": "@jmwindsor/aws-cdk-cjdev",
-  "version": "0.7.2",
+  "name": "@cjdev/aws-cdk-cjdev",
+  "version": "1.0.0",
   "description": "A collection of opinionated aws constructs, which define our commonly used infrastructure patterns",
   "keywords": [
     "aws",
