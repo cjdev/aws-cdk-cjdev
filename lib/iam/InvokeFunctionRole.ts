@@ -5,7 +5,7 @@ import {PolicyDocumentOverPolicyStatements} from "./PolicyDocumentOverPolicyStat
 
 export class InvokeFunctionRole extends Role {
     constructor(scope: Construct, func: Function) {
-        super(scope, 'InvokeFunctionPolicy', {
+        super(scope, 'InvokeFunctionRole', {
                 assumedBy: new ServicePrincipal('apigateway.amazonaws.com'),
                 inlinePolicies: PolicyDocumentOverPolicyStatements.asRoleInlinePolicies([
                         {

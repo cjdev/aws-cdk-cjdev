@@ -19,7 +19,7 @@ export interface FargateContainerServiceProps{
 };
 
 export class FargateContainerService extends cdk.Construct {
-    public readonly taskService: ecs.FargateService;
+    public readonly fargateService: ecs.FargateService;
 
     constructor(scope: cdk.Construct, id: string, props: FargateContainerServiceProps) {
         super(scope, id);
@@ -111,7 +111,7 @@ export class FargateContainerService extends cdk.Construct {
             vpc: props.vpc,
         });
 
-        this.taskService = new ecs.FargateService(this, 'service', {
+        this.fargateService = new ecs.FargateService(this, 'service', {
             cluster: taskServiceCluster,
             vpcSubnets: { subnets: props.subnets },
             taskDefinition: task,
