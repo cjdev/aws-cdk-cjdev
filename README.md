@@ -7,7 +7,7 @@
 
 ```$javascript
 
-import {ProxyApi} from "@jmwindsor/aws-cdk-cjdev";
+import {ProxyApi} from "@cjdev/aws-cdk-cjdev";
 import {App, Stack} from "@aws-cdk/core";
 
 const app = new App();
